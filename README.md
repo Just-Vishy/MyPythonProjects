@@ -5,5 +5,5 @@
 1. My Projects
 2. My Notes
 
-# **Section coming sonn!!!**
+# **Section coming soon!!!**
 
