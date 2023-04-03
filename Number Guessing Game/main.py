@@ -30,7 +30,7 @@ def whatTheNumber():
     elif level == "easy":
         attemptsLeft = easy()
 
-    chosenNumber = random.randint(0, 100)
+    chosenNumber = random.randint(0, 101)
     while not attemptsLeft <= 0:
         print(f"You have {attemptsLeft} remaining, Guess the number")
         guess = int(input("What is the Number: "))
