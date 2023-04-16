@@ -1,5 +1,6 @@
 from turtle import Turtle
-import random
+
+
 class Ball(Turtle):
 
     def __init__(self):
@@ -7,13 +8,23 @@ class Ball(Turtle):
         self.shape("circle")
         self.color("white")
         self.penup()
-        self.direction = [250,-250]
-        self.l_r = random.choice(self.direction)
-        self.goto(self.l_r)
+        self.x_move = 10
+        self.y_move = 10
+        self.move_speed = 0.1
 
-\
-    # def move(self):
-    #     self.forward(20)
+    def move(self):
+        new_x = self.xcor() + self.x_move
+        new_y = self.ycor() + self.y_move
+        self.goto(new_x, new_y)
 
-    def game_over(self):
-        self.write(arg="Game Over", move=False, align="center", font=("Arial", 8, "normal"))
+    def bounce_y(self):
+        self.y_move *= -1
+
+    def bounce_x(self):
+        self.x_move *= -1
+        self.move_speed *= 0.9
+
+    def reset_position(self):
+        self.goto(0, 0)
+        self.move_speed = 0.1
+        self.bounce_x()
