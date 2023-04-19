@@ -9,11 +9,19 @@ class Player(Turtle):
         super().__init__()
         self.shape("turtle")
         self.penup()
-        self.setposition(STARTING_POSITION)
+        self.go_to_start()
         self.setheading(90)
 
     def up(self):
-        if self.ycor() < 280:
-            self.forward(MOVE_DISTANCE)
+        self.forward(MOVE_DISTANCE)
+
+    def go_to_start(self):
+        self.goto(STARTING_POSITION)
+
+    def is_at_finish_line(self):
+        if self.ycor() > FINISH_LINE_Y:
+            return True
+        else:
+            return False
 
 
