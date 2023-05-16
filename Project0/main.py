@@ -1,4 +1,6 @@
 import random
+import json
+
 
 
 def new_existing_user():
@@ -16,6 +18,8 @@ def get_user_profile():
     email = input("Enter your Email Address: ")
     province = input("Enter Province: ")
     password = input("Enter a Password: ")
+    while password == "":
+        password = input("Enter a Password: ")
 
     user_profile = {
         "Name": name,
@@ -45,7 +49,7 @@ def getting_num():
     return username_number
 
 
-def getting_surname(surname):
+def getting_province(surname):
     username_surname = ""
     x = 0
     for profile in surname["Province"]:
@@ -59,42 +63,77 @@ def get_username():
     username = " "
     username += getting_name(users_profile)
     username += getting_num()
-    username += getting_surname(users_profile)
+    username += getting_province(users_profile)
     return username
 
 
 def existing_user_login():
     username = input("Enter Username: ")
     for user in Database:
-        if username in user["Username"]:
+        if username in user["Username"] and username != "":
             check_password = input("Enter Password: ")
-            if check_password in user:
+            if check_password in user["Password"]:
                 login = f"Logging In"
                 return login
             else:
                 invalid_pass = "Invalid Password"
                 return invalid_pass
-        else:
-            no_user = "User not found"
-            return no_user
+    else:
+        status = "User not found"
+        return status
 
+
+with open("Database.txt", "r") as data:
+    file_lines = data.readlines()
 
 Database = []
 
+for line in file_lines:
+    dictionary = json.loads(line)
+    Database.append(dictionary)
+
+Options = new_existing_user()
 System_ON = True
 while System_ON:
-    if new_existing_user() == 2:
+    if Options == 2:
         users_profile = get_user_profile()
         got_username = get_username()
         print(f"Your Username is {got_username}")
         users_profile["Username"] = got_username
         Database.append(users_profile)
-        login_or_not = input("Do you want to login? [Y/n]: ").lower()
+        with open("Database.txt", "r+") as data:
+            for file in Database:
+                files = json.dumps(file)
+                data.write(files)
+                data.write("\n")
 
+        login_or_not = input("Do you want to login? [Y/n]: ").lower()
         if login_or_not == "y":
             user_named = existing_user_login()
             print(user_named)
-    else:
+            if user_named == "User not found":
+                Options = new_existing_user()
+            elif user_named == "Logging In":
+                System_ON = False
+        elif login_or_not == "n":
+            Options = new_existing_user()
+
+    elif Options == 1:
         user_named = existing_user_login()
         print(user_named)
+        if user_named == "User not found":
+            Options = new_existing_user()
+        elif user_named == "Logging In":
+            System_ON = False
+    else:
+        print("Invalid Option, Please Try Again")
+        Options = new_existing_user()
+
+
+
+
+
+
+
+
 
