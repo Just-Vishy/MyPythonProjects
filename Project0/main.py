@@ -219,5 +219,3 @@ while check2 == "1" or check2 == "2" or check2 == "3":
 
     check2 = input("Select the following Options [Enter number Only]\n1. Show Contact List\n2. Creating New Contact\n"
                    "3. Logout\n:").lower()
-
-
