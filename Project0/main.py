@@ -71,7 +71,7 @@ def existing_user_login():
     for user in Database:
         if username in user["Username"] and username != "":
             check_password = input("Enter Password: ")
-            if check_password in user["Password"] and check_password != "":
+            if check_password in user["Password"] and check_password != "" and check_password == user["Password"]:
                 login = f"Logging In"
                 return login
             else:
@@ -172,3 +172,52 @@ while System_ON:
     else:
         print("Invalid Option, Please Try Again")
         Options = new_existing_user()
+
+
+def get_contact():
+    name = input("Enter Contact Name: ")
+    country = input("Enter your Country: ")
+    contact_number = int(input("Enter Contact : "))
+    contacts_profile = {
+        "contact_name": name,
+        'country': country,
+        "contact_number": contact_number
+    }
+
+    return contacts_profile
+
+
+Exit = "Logout"
+
+username_confirm = input("Enter your Username: ")
+
+with open(f"{username_confirm}_List.txt", "w+") as data:
+    contacts = data.readlines()
+
+contact_list = []
+
+for line in contacts:
+    dictionary = json.loads(line)
+    contact_list.append(dictionary)
+
+check2 = input("Select the following Options [Enter number Only]\n1. Show Contact List\n2. Creating New Contact"
+               "\n: ").lower()
+while check2 == "1" or check2 == "2" or check2 == "3":
+    if check2 == "1":
+        print(contact_list)
+    elif check2 == "2":
+        new_contact = get_contact()
+        contact_list.append(new_contact)
+        with open(f"{username_confirm}_List.txt", "r+") as data:
+            for contact in contact_list:
+                contacts = json.dumps(contact)
+                data.write(contacts)
+                data.write("\n")
+    elif check2 == "3":
+        print("Logging Off")
+        break
+
+    check2 = input("Select the following Options [Enter number Only]\n1. Show Contact List\n2. Creating New Contact\n"
+                   "3. Logout\n:").lower()
+
+
