@@ -2,7 +2,6 @@ import random
 import json
 
 
-
 def new_existing_user():
     print("Enter a number")
     new_existing = input("1. Existing User or 2. New User: ")
@@ -72,7 +71,7 @@ def existing_user_login():
     for user in Database:
         if username in user["Username"] and username != "":
             check_password = input("Enter Password: ")
-            if check_password in user["Password"]:
+            if check_password in user["Password"] and check_password != "":
                 login = f"Logging In"
                 return login
             else:
@@ -81,6 +80,30 @@ def existing_user_login():
     else:
         status = "User not found"
         return status
+
+
+def reset_password():
+    username = input("Enter Username: ")
+    surname = input("Enter your Surname: ")
+    email = input("Enter your Email Address: ")
+    province = input("Enter Province: ")
+
+    for user in Database:
+        checks = 0
+        if username in user["Username"] and username != "":
+            checks += 1
+        if surname in user["Surname"] and surname != "":
+            checks += 1
+        if email in user["Email"] and email != "":
+            checks += 1
+        if province in user["Province"] and province != "":
+            checks += 1
+
+        if checks == 4:
+            new_password = input("Enter a new password: ")
+            user["Password"] = new_password
+            return user
+    print("Unfortunately your details don't match, hence you can't reset your password")
 
 
 with open("Database.txt", "r") as data:
@@ -113,6 +136,16 @@ while System_ON:
             print(user_named)
             if user_named == "User not found":
                 Options = new_existing_user()
+            elif user_named == "Invalid Password":
+                get_check = input("forgot password? [Y/n]: ").lower()
+                if get_check == "y":
+                    resetting = reset_password()
+                    if resetting != "Unfortunately your details don't match, hence you can't reset your password":
+                        with open("Database.txt", "r+") as data:
+                            for file in Database:
+                                files = json.dumps(file)
+                                data.write(files)
+                                data.write("\n")
             elif user_named == "Logging In":
                 System_ON = False
         elif login_or_not == "n":
@@ -122,18 +155,20 @@ while System_ON:
         user_named = existing_user_login()
         print(user_named)
         if user_named == "User not found":
-            Options = new_existing_user()
+            for _ in range(2):
+                Options = new_existing_user()
+        elif user_named == "Invalid Password":
+            get_check = input("forgot password? [Y/n]: ").lower()
+            if get_check == "y":
+                resetting = reset_password()
+                if resetting != "Unfortunately your details don't match, hence you can't reset your password":
+                    with open("Database.txt", "r+") as data:
+                        for file in Database:
+                            files = json.dumps(file)
+                            data.write(files)
+                            data.write("\n")
         elif user_named == "Logging In":
             System_ON = False
     else:
         print("Invalid Option, Please Try Again")
         Options = new_existing_user()
-
-
-
-
-
-
-
-
-
