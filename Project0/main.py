@@ -117,6 +117,7 @@ for line in file_lines:
 
 Options = new_existing_user()
 System_ON = True
+No_Continue = False
 while System_ON:
     if Options == 2:
         users_profile = get_user_profile()
@@ -129,9 +130,8 @@ while System_ON:
                 files = json.dumps(file)
                 data.write(files)
                 data.write("\n")
-
-        login_or_not = input("Do you want to login? [Y/n]: ").lower()
-        if login_or_not == "y":
+        login_or_not = input("1. Login\n2. Menu\n3. Exit\n: ").lower()
+        if login_or_not == "1":
             user_named = existing_user_login()
             print(user_named)
             if user_named == "User not found":
@@ -148,8 +148,11 @@ while System_ON:
                                 data.write("\n")
             elif user_named == "Logging In":
                 System_ON = False
-        elif login_or_not == "n":
+        elif login_or_not == "2":
             Options = new_existing_user()
+        else:
+            System_ON = False
+            No_Continue = True
 
     elif Options == 1:
         user_named = existing_user_login()
@@ -176,7 +179,7 @@ while System_ON:
 
 def get_contact():
     name = input("Enter Contact Name: ")
-    country = input("Enter your Country: ")
+    country = input("Enter your Country Code: +")
     contact_number = int(input("Enter Contact : "))
     contacts_profile = {
         "contact_name": name,
@@ -187,35 +190,11 @@ def get_contact():
     return contacts_profile
 
 
-Exit = "Logout"
+state = ""
+if not No_Continue:
+    state_on = True
+    while state_on:
+        logout_not = input(": ").lower()
+        if logout_not == "logout":
+            state_on = False
 
-username_confirm = input("Enter your Username: ")
-
-with open(f"{username_confirm}_List.txt", "w+") as data:
-    contacts = data.readlines()
-
-contact_list = []
-
-for line in contacts:
-    dictionary = json.loads(line)
-    contact_list.append(dictionary)
-
-check2 = input("Select the following Options [Enter number Only]\n1. Show Contact List\n2. Creating New Contact"
-               "\n: ").lower()
-while check2 == "1" or check2 == "2" or check2 == "3":
-    if check2 == "1":
-        print(contact_list)
-    elif check2 == "2":
-        new_contact = get_contact()
-        contact_list.append(new_contact)
-        with open(f"{username_confirm}_List.txt", "r+") as data:
-            for contact in contact_list:
-                contacts = json.dumps(contact)
-                data.write(contacts)
-                data.write("\n")
-    elif check2 == "3":
-        print("Logging Off")
-        break
-
-    check2 = input("Select the following Options [Enter number Only]\n1. Show Contact List\n2. Creating New Contact\n"
-                   "3. Logout\n:").lower()
