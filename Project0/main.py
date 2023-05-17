@@ -190,7 +190,6 @@ def get_contact():
     return contacts_profile
 
 
-state = ""
 if not No_Continue:
     state_on = True
     while state_on:
